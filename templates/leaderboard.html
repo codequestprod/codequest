@@ -3,39 +3,45 @@
 {% block content %}
 
 <div class="card">
-
     <h1>🏆 Leaderboard</h1>
-    <p>Top players ranked by XP</p>
-
+    <p>Top players ranked by Total XP</p>
 </div>
 
 <div class="leaderboard">
 
     {% for user in users %}
 
-        <div class="leaderboard-row rank-{{ loop.index }}">
+    <div class="leaderboard-row rank-{{ loop.index }}">
 
-            <div class="rank">
-                {% if loop.index == 1 %}
-                    🥇
-                {% elif loop.index == 2 %}
-                    🥈
-                {% elif loop.index == 3 %}
-                    🥉
-                {% else %}
-                    #{{ loop.index }}
-                {% endif %}
-            </div>
-
-            <div class="name">
-                {{ user.username }}
-            </div>
-
-            <div class="xp">
-                ⭐ {{ user.xp }} XP
-            </div>
-
+        <div class="rank">
+            {% if loop.index == 1 %}
+                🥇
+            {% elif loop.index == 2 %}
+                🥈
+            {% elif loop.index == 3 %}
+                🥉
+            {% else %}
+                #{{ loop.index }}
+            {% endif %}
         </div>
+
+        <div class="name">
+            <strong>{{ user.username }}</strong>
+            <br>
+            <small>Level {{ user.level }}</small>
+        </div>
+
+        <div class="xp">
+            ⭐ {{ user.total_xp }} XP
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="card">
+        <p>No players yet. Be the first to earn some XP!</p>
+    </div>
 
     {% endfor %}
 
