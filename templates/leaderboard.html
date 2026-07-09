@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+
+    <h1>🏆 Leaderboard</h1>
+    <p>Top players ranked by XP</p>
+
+</div>
+
+<div class="leaderboard">
+
+    {% for user in users %}
+
+        <div class="leaderboard-row rank-{{ loop.index }}">
+
+            <div class="rank">
+                {% if loop.index == 1 %}
+                    🥇
+                {% elif loop.index == 2 %}
+                    🥈
+                {% elif loop.index == 3 %}
+                    🥉
+                {% else %}
+                    #{{ loop.index }}
+                {% endif %}
+            </div>
+
+            <div class="name">
+                {{ user.username }}
+            </div>
+
+            <div class="xp">
+                ⭐ {{ user.xp }} XP
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Profile</h2>
+
+<p>Username: {{ user.username }}</p>
+
+<p>XP: {{ user.xp }}</p>
+
+<p>Level: {{ user.level }}</p>
+
+<h3>Badges 🎖️</h3>
+
+{% for badge in user.badges %}
+    <div>
+        {{ badge.icon }} {{ badge.name }} - {{ badge.description }}
+    </div>
+{% endfor %}    
+
+{% endblock %}

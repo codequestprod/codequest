@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% set xp_needed = (100 * (1.5 ** (current_user.level - 1))) | int %}
+
+<div class="card">
+
+    <h1>Welcome back, {{ current_user.username }}! 👋</h1>
+
+    <h3>Level Progress</h3>
+
+    <div class="progress-bar">
+        <div
+            class="progress-fill"
+            style="width: {{ (current_user.level_xp / xp_needed) * 100 if xp_needed > 0 else 0 }}%;"
+        ></div>
+    </div>
+
+    <p>
+        {{ current_user.level_xp }} / {{ xp_needed }} XP
+    </p>
+
+</div>
+
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <h3>⭐ Total XP</h3>
+        <div class="stat-value">
+            {{ current_user.total_xp }}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <h3>🏆 Level</h3>
+        <div class="stat-value">
+            {{ current_user.level }}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <h3>🪙 Coins</h3>
+        <div class="stat-value">
+            {{ current_user.coins }}
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <h3>🔥 Streak</h3>
+        <div class="stat-value">
+            {{ current_user.streak }}
+        </div>
+    </div>
+
+</div>
+
+
+<div style="text-align: center; margin-top: 30px;">
+
+    <a href="{{ url_for('daily_reward') }}">
+        <button>
+            🎁 Claim Daily Reward
+        </button>
+    </a>
+
+</div>
+
+{% endblock %}

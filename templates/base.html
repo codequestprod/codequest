@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CodeQuest</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<nav>
+
+    {% if current_user.is_authenticated %}
+
+        <a href="/dashboard">Dashboard</a>
+        <a href="/challenges">Challenges</a>
+        <a href="/profile">Profile</a>
+        <a href="/leaderboard">Leaderboard</a>
+        <a href="/logout">Logout</a>
+
+    {% else %}
+
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+
+    {% endif %}
+
+</nav>
+
+<hr>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
