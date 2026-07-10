@@ -90,6 +90,16 @@ with app.app_context():
 
         db.session.commit()
 
+@app.route("/admin/reset-db")
+@login_required
+def reset_db():
+    if current_user.email != "your@email.com":
+        abort(403)
+
+    db.drop_all()
+    db.create_all()
+
+    return "Database reset!"
 
 # =========================
 # DAILY REWARD
