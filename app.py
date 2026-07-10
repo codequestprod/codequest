@@ -3,12 +3,14 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, timedelta
 from extensions import db
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 
 # CONFIG
-app.config["SECRET_KEY"] = "dev-secret-key"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///codequest.db"
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
