@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from extensions import db
 import os
 from dotenv import load_dotenv
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from email_utils import send_verification_email
 
 app = Flask(__name__)
@@ -209,6 +209,39 @@ def register():
 
     return render_template("register.html")
 
+@app.route("/verify/<token>")
+def verify_email(token):
+    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+
+    try:
+        email = serializer.loads(
+            token,
+            salt="email-verification",
+            max_age=86400  # 24 hours
+        )
+    except SignatureExpired:
+        flash("Your verification link has expired.", "error")
+        return redirect(url_for("login"))
+    except BadSignature:
+        flash("Invalid verification link.", "error")
+        return redirect(url_for("login"))
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        flash("User not found.", "error")
+        return redirect(url_for("register"))
+
+    if user.verified:
+        flash("Your email is already verified.", "info")
+        return redirect(url_for("login"))
+
+    user.verified = True
+    db.session.commit()
+
+    flash("Your email has been verified! You can now log in. 🎉", "success")
+    return redirect(url_for("login"))
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -221,6 +254,11 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
+
+            if not user.verified:
+                flash("Please verify your email before logging in.", "warning")
+                return redirect(url_for("login"))
+
             login_user(user)
             return redirect(url_for("dashboard"))
 
