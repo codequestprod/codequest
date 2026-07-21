@@ -28,3 +28,5 @@ class User(UserMixin, db.Model):
     level_xp = db.Column(db.Integer, default=0)
 
     last_daily = db.Column(db.Date, nullable=True)
+
+    verified = db.Column(db.Boolean, default=False)

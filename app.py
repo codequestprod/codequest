@@ -5,6 +5,8 @@ from datetime import date, timedelta
 from extensions import db
 import os
 from dotenv import load_dotenv
+from itsdangerous import URLSafeTimedSerializer
+from email_utils import send_verification_email
 
 app = Flask(__name__)
 
@@ -200,8 +202,9 @@ def register():
 
         db.session.add(new_user)
         db.session.commit()
+        send_verification_email(app, new_user)
 
-        flash("Account created successfully! 🎉", "success")
+        flash("Account created successfully! Please check your email to verify your account. 🎉", "success")
         return redirect(url_for("login"))
 
     return render_template("register.html")
