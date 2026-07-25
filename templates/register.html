@@ -46,8 +46,12 @@
 
         <br><br>
 
-        <button type="button" onclick="togglePassword()">
-            Show / Hide Password
+        <button
+            type="button"
+            id="togglePasswordButton"
+            onclick="togglePassword()"
+        >
+            Show Password
         </button>
 
         <br><br>
@@ -64,11 +68,19 @@
 function togglePassword() {
     const pw = document.getElementById("password");
     const cpw = document.getElementById("confirm_password");
+    const button = document.getElementById("togglePasswordButton");
 
-    const newType = pw.type === "password" ? "text" : "password";
+    const showing = pw.type === "text";
 
-    pw.type = newType;
-    cpw.type = newType;
+    if (showing) {
+        pw.type = "password";
+        cpw.type = "password";
+        button.textContent = "Show Password";
+    } else {
+        pw.type = "text";
+        cpw.type = "text";
+        button.textContent = "Hide Password";
+    }
 }
 </script>
 
