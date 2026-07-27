@@ -53,7 +53,7 @@
 
         <p
             id="passwordMatchHint"
-            style="color:red; font-size:14px; margin-top:5px; display:none;"
+            style="color:red; font-size:14px; margin:2px 0 8px 0; visibility:hidden;"
         >
             Passwords do not match
         </p>
@@ -179,7 +179,13 @@ password.addEventListener("input", () => {
 });
 
 
-confirmPassword.addEventListener("input", updateForm);
+confirmPassword.addEventListener("input", () => {
+    updateForm();
+
+    if (confirmPassword.value.length > 0) {
+        checkPasswordMatch();
+    }
+});
 
 
 confirmPassword.addEventListener("blur", checkPasswordMatch);
@@ -206,11 +212,11 @@ function checkPasswordMatch() {
         password.value !== confirmPassword.value
     ) {
 
-        passwordMatchHint.style.display = "block";
+        passwordMatchHint.style.visibility = "visible";
 
     } else {
 
-        passwordMatchHint.style.display = "none";
+        passwordMatchHint.style.visibility = "hidden";
 
     }
 
