@@ -352,6 +352,7 @@ def profile():
 # =========================
 
 with app.app_context():
+    print(os.getenv("DATABASE_URL"))
     db.create_all()
     
 if __name__ == "__main__":
