@@ -1,3 +1,4 @@
+```html
 {% extends "base.html" %}
 
 {% block content %}
@@ -48,6 +49,19 @@
 
         <br><br>
 
+        <div id="passwordRequirements" style="text-align:left; margin:auto; width:300px;">
+
+            <strong>Password Requirements</strong>
+
+            <p id="lengthCheck" style="color:red;">✗ At least 8 characters</p>
+            <p id="letterCheck" style="color:red;">✗ Contains a letter</p>
+            <p id="numberCheck" style="color:red;">✗ Contains a number</p>
+            <p id="matchCheck" style="color:red;">✗ Passwords match</p>
+
+        </div>
+
+        <br>
+
         <button
             type="button"
             id="togglePasswordButton"
@@ -58,7 +72,11 @@
 
         <br><br>
 
-        <button type="submit">
+        <button
+            type="submit"
+            id="createAccountButton"
+            disabled
+        >
             Create Account
         </button>
 
@@ -67,7 +85,13 @@
 </div>
 
 <script>
+
+// ======================
+// SHOW / HIDE PASSWORD
+// ======================
+
 function togglePassword() {
+
     const pw = document.getElementById("password");
     const cpw = document.getElementById("confirm_password");
     const button = document.getElementById("togglePasswordButton");
@@ -85,16 +109,89 @@ function togglePassword() {
     }
 }
 
-// Prevent spaces in all fields
+// ======================
+// PREVENT SPACES
+// ======================
+
 const noSpaces = ["username", "email", "password", "confirm_password"];
 
 noSpaces.forEach(id => {
+
     const input = document.getElementById(id);
 
     input.addEventListener("input", () => {
         input.value = input.value.replace(/\s/g, "");
     });
+
 });
+
+// ======================
+// LIVE PASSWORD CHECKER
+// ======================
+
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirm_password");
+
+password.addEventListener("input", validatePassword);
+confirmPassword.addEventListener("input", validatePassword);
+
+function validatePassword() {
+
+    const pw = password.value;
+    const cpw = confirmPassword.value;
+
+    updateRequirement(
+        "lengthCheck",
+        pw.length >= 8,
+        "At least 8 characters"
+    );
+
+    updateRequirement(
+        "letterCheck",
+        /[A-Za-z]/.test(pw),
+        "Contains a letter"
+    );
+
+    updateRequirement(
+        "numberCheck",
+        /\d/.test(pw),
+        "Contains a number"
+    );
+
+    updateRequirement(
+        "matchCheck",
+        pw === cpw && cpw.length > 0,
+        "Passwords match"
+    );
+
+    const createButton = document.getElementById("createAccountButton");
+
+    const valid =
+        pw.length >= 8 &&
+        /[A-Za-z]/.test(pw) &&
+        /\d/.test(pw) &&
+        pw === cpw &&
+        cpw.length > 0;
+
+    createButton.disabled = !valid;
+
+}
+
+function updateRequirement(id, passed, text) {
+
+    const element = document.getElementById(id);
+
+    if (passed) {
+        element.style.color = "green";
+        element.textContent = "✓ " + text;
+    } else {
+        element.style.color = "red";
+        element.textContent = "✗ " + text;
+    }
+
+}
+
 </script>
 
 {% endblock %}
+```
