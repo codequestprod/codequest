@@ -38,7 +38,7 @@
 
         <p
             id="passwordHint"
-            style="color:red; font-size:14px; margin-top:5px;"
+            style="color:red; font-size:14px; margin-top:5px; visibility:hidden;"
         >
             Password must be at least 8 characters
         </p>
@@ -150,19 +150,39 @@ const passwordMatchHint = document.getElementById("passwordMatchHint");
 const createButton = document.getElementById("createAccountButton");
 
 
+password.addEventListener("focus", () => {
+
+    if (password.value.length < 8) {
+        passwordHint.style.visibility = "visible";
+    }
+
+});
+
+
 password.addEventListener("input", () => {
+
     updateForm();
 
-    // Update mismatch message if confirm password was already filled
+    if (password.value.length >= 8) {
+
+        passwordHint.style.visibility = "hidden";
+
+    } else {
+
+        passwordHint.style.visibility = "visible";
+
+    }
+
+
     if (confirmPassword.value.length > 0) {
         checkPasswordMatch();
     }
+
 });
+
 
 confirmPassword.addEventListener("input", updateForm);
 
-
-// Only show mismatch after leaving confirm password field
 
 confirmPassword.addEventListener("blur", checkPasswordMatch);
 
@@ -170,19 +190,10 @@ confirmPassword.addEventListener("blur", checkPasswordMatch);
 function updateForm() {
 
     const passwordValid = password.value.length >= 8;
-    const passwordsMatch = password.value === confirmPassword.value 
-        && confirmPassword.value.length > 0;
 
-
-    if (passwordValid) {
-
-        passwordHint.style.display = "none";
-
-    } else {
-
-        passwordHint.style.display = "block";
-
-    }
+    const passwordsMatch =
+        password.value === confirmPassword.value &&
+        confirmPassword.value.length > 0;
 
 
     createButton.disabled = !(passwordValid && passwordsMatch);
