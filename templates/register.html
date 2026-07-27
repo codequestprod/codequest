@@ -36,18 +36,12 @@
             required
         >
 
-        <br>
-
-        <div id="passwordRequirements">
-
-            <strong>Password Requirements</strong>
-
-            <p id="lengthCheck">✗ At least 8 characters</p>
-            <p id="letterCheck">✗ Contains a letter</p>
-            <p id="numberCheck">✗ Contains a number</p>
-            <p id="matchCheck">✗ Passwords match</p>
-
-        </div>
+        <p
+            id="passwordHint"
+            style="color:red; font-size:14px; margin-top:5px;"
+        >
+            Password must be at least 8 characters
+        </p>
 
         <br>
 
@@ -58,6 +52,13 @@
             placeholder="Confirm Password"
             required
         >
+
+        <p
+            id="passwordMatchHint"
+            style="color:red; font-size:14px; margin-top:5px; display:none;"
+        >
+            Passwords do not match
+        </p>
 
         <br><br>
 
@@ -86,7 +87,9 @@
 
 <script>
 
-// Show / Hide Password
+// ======================
+// SHOW / HIDE PASSWORD
+// ======================
 
 function togglePassword() {
 
@@ -107,10 +110,13 @@ function togglePassword() {
         button.textContent = "Show Password";
 
     }
+
 }
 
 
-// Prevent spaces
+// ======================
+// PREVENT SPACES
+// ======================
 
 const noSpaces = [
     "username",
@@ -132,95 +138,74 @@ noSpaces.forEach(id => {
 });
 
 
-// Password validation
+// ======================
+// PASSWORD VALIDATION
+// ======================
 
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirm_password");
 
-password.addEventListener("input", validatePassword);
-confirmPassword.addEventListener("input", validatePassword);
+const passwordHint = document.getElementById("passwordHint");
+const passwordMatchHint = document.getElementById("passwordMatchHint");
+const createButton = document.getElementById("createAccountButton");
 
 
-function validatePassword() {
+password.addEventListener("input", () => {
+    updateForm();
 
-    const pw = password.value;
-    const cpw = confirmPassword.value;
-
-    const length = pw.length >= 8;
-    const letter = /[A-Za-z]/.test(pw);
-    const number = /\d/.test(pw);
-    const match = pw === cpw && cpw.length > 0;
-
-
-    updateRequirement(
-        "lengthCheck",
-        length,
-        "At least 8 characters"
-    );
-
-    updateRequirement(
-        "letterCheck",
-        letter,
-        "Contains a letter"
-    );
-
-    updateRequirement(
-        "numberCheck",
-        number,
-        "Contains a number"
-    );
-
-    updateRequirement(
-        "matchCheck",
-        match,
-        "Passwords match"
-    );
-
-
-    const valid =
-        length &&
-        letter &&
-        number &&
-        match;
-
-
-    document.getElementById("createAccountButton").disabled = !valid;
-
-
-    const requirements = document.getElementById("passwordRequirements");
-
-    if (valid) {
-        requirements.style.display = "none";
-    } else {
-        requirements.style.display = "block";
+    // Update mismatch message if confirm password was already filled
+    if (confirmPassword.value.length > 0) {
+        checkPasswordMatch();
     }
+});
+
+confirmPassword.addEventListener("input", updateForm);
+
+
+// Only show mismatch after leaving confirm password field
+
+confirmPassword.addEventListener("blur", checkPasswordMatch);
+
+
+function updateForm() {
+
+    const passwordValid = password.value.length >= 8;
+    const passwordsMatch = password.value === confirmPassword.value 
+        && confirmPassword.value.length > 0;
+
+
+    if (passwordValid) {
+
+        passwordHint.style.display = "none";
+
+    } else {
+
+        passwordHint.style.display = "block";
+
+    }
+
+
+    createButton.disabled = !(passwordValid && passwordsMatch);
 
 }
 
 
-function updateRequirement(id, passed, text) {
+function checkPasswordMatch() {
 
-    const element = document.getElementById(id);
+    if (
+        confirmPassword.value.length > 0 &&
+        password.value !== confirmPassword.value
+    ) {
 
-    if (passed) {
-
-        element.style.color = "green";
-        element.textContent = "✓ " + text;
+        passwordMatchHint.style.display = "block";
 
     } else {
 
-        element.style.color = "red";
-        element.textContent = "✗ " + text;
+        passwordMatchHint.style.display = "none";
 
     }
 
 }
-
-
-// Hide requirements initially
-
-document.getElementById("passwordRequirements").style.display = "none";
-
 
 </script>
 

@@ -177,14 +177,6 @@ def register():
             flash("Password must be at least 8 characters long.", "error")
             return redirect(url_for("register"))
 
-        if not any(c.isalpha() for c in password):
-            flash("Password must contain at least one letter.", "error")
-            return redirect(url_for("register"))
-
-        if not any(c.isdigit() for c in password):
-            flash("Password must contain at least one number.", "error")
-            return redirect(url_for("register"))
-
         if password != confirm_password:
             flash("Passwords do not match!", "error")
             return redirect(url_for("register"))
