@@ -158,10 +158,19 @@ def register():
 
     if request.method == "POST":
 
-        username = request.form["username"]
-        email = request.form["email"]
+        username = request.form["username"].strip()
+        email = request.form["email"].strip()
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
+
+        if (
+            " " in username or
+            " " in email or
+            " " in password or
+            " " in confirm_password
+        ):            
+            flash("Spaces are not allowed in usernames, emails, or passwords.", "error")
+            return redirect(url_for("register"))
 
         # Password must be at least 8 characters
         if len(password) < 8:
@@ -247,8 +256,12 @@ def login():
 
     if request.method == "POST":
 
-        username = request.form["username"]
+        username = request.form["username"].strip()
         password = request.form["password"]
+
+        if " " in username or " " in password:
+            flash("Spaces are not allowed in usernames or passwords.", "error")
+            return redirect(url_for("login"))
 
         user = User.query.filter_by(username=username).first()
 

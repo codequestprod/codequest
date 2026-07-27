@@ -1,3 +1,4 @@
+```html
 {% extends "base.html" %}
 
 {% block content %}
@@ -10,6 +11,7 @@
 
         <input
             type="text"
+            id="username"
             name="username"
             placeholder="Username"
             required
@@ -19,6 +21,7 @@
 
         <input
             type="email"
+            id="email"
             name="email"
             placeholder="Email"
             required
@@ -82,6 +85,18 @@ function togglePassword() {
         button.textContent = "Hide Password";
     }
 }
+
+// Prevent spaces in all fields
+const noSpaces = ["username", "email", "password", "confirm_password"];
+
+noSpaces.forEach(id => {
+    const input = document.getElementById(id);
+
+    input.addEventListener("input", () => {
+        input.value = input.value.replace(/\s/g, "");
+    });
+});
 </script>
 
 {% endblock %}
+```

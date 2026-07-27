@@ -1,3 +1,4 @@
+```html
 {% extends "base.html" %}
 
 {% block content %}
@@ -10,6 +11,7 @@
 
         <input
             type="text"
+            id="username"
             name="username"
             placeholder="Username"
             required
@@ -58,6 +60,18 @@ function togglePassword() {
         button.textContent = "Show Password";
     }
 }
+
+// Prevent spaces in username and password
+const noSpaces = ["username", "password"];
+
+noSpaces.forEach(id => {
+    const input = document.getElementById(id);
+
+    input.addEventListener("input", () => {
+        input.value = input.value.replace(/\s/g, "");
+    });
+});
 </script>
 
 {% endblock %}
+```
