@@ -36,7 +36,20 @@
             required
         >
 
-        <br><br>
+        <br>
+
+        <div id="passwordRequirements">
+
+            <strong>Password Requirements</strong>
+
+            <p id="lengthCheck">✗ At least 8 characters</p>
+            <p id="letterCheck">✗ Contains a letter</p>
+            <p id="numberCheck">✗ Contains a number</p>
+            <p id="matchCheck">✗ Passwords match</p>
+
+        </div>
+
+        <br>
 
         <input
             type="password"
@@ -47,19 +60,6 @@
         >
 
         <br><br>
-
-        <div id="passwordRequirements" style="text-align:left; margin:auto; width:300px;">
-
-            <strong>Password Requirements</strong>
-
-            <p id="lengthCheck" style="color:red;">✗ At least 8 characters</p>
-            <p id="letterCheck" style="color:red;">✗ Contains a letter</p>
-            <p id="numberCheck" style="color:red;">✗ Contains a number</p>
-            <p id="matchCheck" style="color:red;">✗ Passwords match</p>
-
-        </div>
-
-        <br>
 
         <button
             type="button"
@@ -83,11 +83,10 @@
 
 </div>
 
+
 <script>
 
-// ======================
-// SHOW / HIDE PASSWORD
-// ======================
+// Show / Hide Password
 
 function togglePassword() {
 
@@ -95,38 +94,45 @@ function togglePassword() {
     const cpw = document.getElementById("confirm_password");
     const button = document.getElementById("togglePasswordButton");
 
-    const showing = pw.type === "text";
+    if (pw.type === "password") {
 
-    if (showing) {
-        pw.type = "password";
-        cpw.type = "password";
-        button.textContent = "Show Password";
-    } else {
         pw.type = "text";
         cpw.type = "text";
         button.textContent = "Hide Password";
+
+    } else {
+
+        pw.type = "password";
+        cpw.type = "password";
+        button.textContent = "Show Password";
+
     }
 }
 
-// ======================
-// PREVENT SPACES
-// ======================
 
-const noSpaces = ["username", "email", "password", "confirm_password"];
+// Prevent spaces
+
+const noSpaces = [
+    "username",
+    "email",
+    "password",
+    "confirm_password"
+];
 
 noSpaces.forEach(id => {
 
     const input = document.getElementById(id);
 
     input.addEventListener("input", () => {
+
         input.value = input.value.replace(/\s/g, "");
+
     });
 
 });
 
-// ======================
-// LIVE PASSWORD CHECKER
-// ======================
+
+// Password validation
 
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirm_password");
@@ -134,62 +140,89 @@ const confirmPassword = document.getElementById("confirm_password");
 password.addEventListener("input", validatePassword);
 confirmPassword.addEventListener("input", validatePassword);
 
+
 function validatePassword() {
 
     const pw = password.value;
     const cpw = confirmPassword.value;
 
+    const length = pw.length >= 8;
+    const letter = /[A-Za-z]/.test(pw);
+    const number = /\d/.test(pw);
+    const match = pw === cpw && cpw.length > 0;
+
+
     updateRequirement(
         "lengthCheck",
-        pw.length >= 8,
+        length,
         "At least 8 characters"
     );
 
     updateRequirement(
         "letterCheck",
-        /[A-Za-z]/.test(pw),
+        letter,
         "Contains a letter"
     );
 
     updateRequirement(
         "numberCheck",
-        /\d/.test(pw),
+        number,
         "Contains a number"
     );
 
     updateRequirement(
         "matchCheck",
-        pw === cpw && cpw.length > 0,
+        match,
         "Passwords match"
     );
 
-    const createButton = document.getElementById("createAccountButton");
 
     const valid =
-        pw.length >= 8 &&
-        /[A-Za-z]/.test(pw) &&
-        /\d/.test(pw) &&
-        pw === cpw &&
-        cpw.length > 0;
+        length &&
+        letter &&
+        number &&
+        match;
 
-    createButton.disabled = !valid;
+
+    document.getElementById("createAccountButton").disabled = !valid;
+
+
+    const requirements = document.getElementById("passwordRequirements");
+
+    if (valid) {
+        requirements.style.display = "none";
+    } else {
+        requirements.style.display = "block";
+    }
 
 }
+
 
 function updateRequirement(id, passed, text) {
 
     const element = document.getElementById(id);
 
     if (passed) {
+
         element.style.color = "green";
         element.textContent = "✓ " + text;
+
     } else {
+
         element.style.color = "red";
         element.textContent = "✗ " + text;
+
     }
 
 }
 
+
+// Hide requirements initially
+
+document.getElementById("passwordRequirements").style.display = "none";
+
+
 </script>
+
 
 {% endblock %}
