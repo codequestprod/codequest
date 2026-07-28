@@ -30,3 +30,5 @@ class User(UserMixin, db.Model):
     last_daily = db.Column(db.Date, nullable=True)
 
     verified = db.Column(db.Boolean, default=False)
+
+    reset_token = db.Column(db.String(100), nullable=True)

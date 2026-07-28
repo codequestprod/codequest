@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, timedelta
-from extensions import db
-import os
+from extensions import db, migrate
 from dotenv import load_dotenv
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from email_utils import send_verification_email
+import os
 
 app = Flask(__name__)
 
@@ -15,6 +15,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+migrate.init_app(app, db)
 
 # LOGIN MANAGER
 login_manager = LoginManager()
@@ -64,7 +65,6 @@ from models.badge import Badge
 # DB INIT
 # =========================
 with app.app_context():
-    db.create_all()
 
     if Badge.query.count() == 0:
         db.session.add(Badge(name="First Steps", description="Complete your first challenge", icon="🚀"))
