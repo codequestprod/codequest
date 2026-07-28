@@ -6,6 +6,9 @@ from extensions import db, migrate
 from dotenv import load_dotenv
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from email_utils import send_verification_email
+from models.user import User
+from models.challenge import Challenge, CompletedChallenge
+from models.badge import Badge
 import os
 
 app = Flask(__name__)
@@ -56,9 +59,6 @@ def add_xp(user, amount):
 # =========================
 # MODELS
 # =========================
-from models.user import User
-from models.challenge import Challenge, CompletedChallenge
-from models.badge import Badge
 
 
 # =========================
