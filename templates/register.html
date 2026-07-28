@@ -48,7 +48,7 @@
 
         <p
             id="passwordHint"
-            style="color:red; font-size:14px; margin:2px 0 0 0; visibility:hidden;"
+            style="color:red; font-size:14px; margin:2px 0 8px 0; visibility:hidden;"
         >
             Password must be at least 8 characters
         </p>
@@ -166,6 +166,8 @@ let emailAvailable = false;
 
 username.addEventListener("blur", checkUsername);
 email.addEventListener("blur", checkEmail);
+username.addEventListener("input", checkUsername);
+email.addEventListener("input", checkEmail);
 
 
 password.addEventListener("focus", () => {
