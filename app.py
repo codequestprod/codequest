@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, timedelta
@@ -270,6 +270,20 @@ def login():
         return redirect(url_for("login"))
 
     return render_template("login.html")
+
+@app.route("/check-register")
+def check_register():
+
+    username = request.args.get("username", "").strip()
+    email = request.args.get("email", "").strip()
+
+    username_exists = User.query.filter_by(username=username).first() is not None
+    email_exists = User.query.filter_by(email=email).first() is not None
+
+    return jsonify({
+        "username_exists": username_exists,
+        "email_exists": email_exists
+    })
 
 
 @app.route("/leaderboard")

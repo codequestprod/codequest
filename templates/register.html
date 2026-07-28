@@ -16,7 +16,12 @@
             required
         >
 
-        <br><br>
+        <p
+            id="usernameHint"
+            style="color:red; font-size:14px; margin:2px 0 8px 0; visibility:hidden;"
+        >
+            Username already exists
+        </p>
 
         <input
             type="email"
@@ -26,7 +31,12 @@
             required
         >
 
-        <br><br>
+        <p
+            id="emailHint"
+            style="color:red; font-size:14px; margin:2px 0 8px 0; visibility:hidden;"
+        >
+            Email already exists
+        </p>
 
         <input
             type="password"
@@ -53,12 +63,10 @@
 
         <p
             id="passwordMatchHint"
-            style="color:red; font-size:14px; margin:2px 0 8px 0; visibility:hidden;"
+            style="color:red; font-size:14px; margin:2px 0 4px 0; visibility:hidden;"
         >
             Passwords do not match
         </p>
-
-        <br>
 
         <button
             type="button"
@@ -81,7 +89,6 @@
     </form>
 
 </div>
-
 
 <script>
 
@@ -140,12 +147,25 @@ noSpaces.forEach(id => {
 // PASSWORD VALIDATION
 // ======================
 
+const username = document.getElementById("username");
+const email = document.getElementById("email");
+
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirm_password");
 
+const usernameHint = document.getElementById("usernameHint");
+const emailHint = document.getElementById("emailHint");
+
 const passwordHint = document.getElementById("passwordHint");
 const passwordMatchHint = document.getElementById("passwordMatchHint");
+
 const createButton = document.getElementById("createAccountButton");
+
+let usernameAvailable = false;
+let emailAvailable = false;
+
+username.addEventListener("blur", checkUsername);
+email.addEventListener("blur", checkEmail);
 
 
 password.addEventListener("focus", () => {
@@ -171,7 +191,6 @@ password.addEventListener("input", () => {
 
     }
 
-
     if (confirmPassword.value.length > 0) {
         checkPasswordMatch();
     }
@@ -180,11 +199,13 @@ password.addEventListener("input", () => {
 
 
 confirmPassword.addEventListener("input", () => {
+
     updateForm();
 
     if (confirmPassword.value.length > 0) {
         checkPasswordMatch();
     }
+
 });
 
 
@@ -199,8 +220,12 @@ function updateForm() {
         password.value === confirmPassword.value &&
         confirmPassword.value.length > 0;
 
-
-    createButton.disabled = !(passwordValid && passwordsMatch);
+    createButton.disabled = !(
+        passwordValid &&
+        passwordsMatch &&
+        usernameAvailable &&
+        emailAvailable
+    );
 
 }
 
@@ -222,7 +247,69 @@ function checkPasswordMatch() {
 
 }
 
-</script>
+async function checkUsername() {
 
+    if (username.value.length === 0) {
+        usernameHint.style.visibility = "hidden";
+        usernameAvailable = false;
+        updateForm();
+        return;
+    }
+
+    const response = await fetch(
+        `/check-register?username=${encodeURIComponent(username.value)}`
+    );
+
+    const data = await response.json();
+
+    if (data.username_exists) {
+
+        usernameHint.style.visibility = "visible";
+        usernameAvailable = false;
+
+    } else {
+
+        usernameHint.style.visibility = "hidden";
+        usernameAvailable = true;
+
+    }
+
+    updateForm();
+
+}
+
+
+async function checkEmail() {
+
+    if (email.value.length === 0) {
+        emailHint.style.visibility = "hidden";
+        emailAvailable = false;
+        updateForm();
+        return;
+    }
+
+    const response = await fetch(
+        `/check-register?email=${encodeURIComponent(email.value)}`
+    );
+
+    const data = await response.json();
+
+    if (data.email_exists) {
+
+        emailHint.style.visibility = "visible";
+        emailAvailable = false;
+
+    } else {
+
+        emailHint.style.visibility = "hidden";
+        emailAvailable = true;
+
+    }
+
+    updateForm();
+
+}
+
+</script>
 
 {% endblock %}
