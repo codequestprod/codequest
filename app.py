@@ -334,6 +334,17 @@ def challenges():
         completed_ids=completed_ids
     )
 
+@app.route("/challenge/<int:challenge_id>")
+@login_required
+def challenge(challenge_id):
+
+    challenge = Challenge.query.get_or_404(challenge_id)
+
+    return render_template(
+        "challenge.html",
+        challenge=challenge
+    )
+
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])
 @login_required

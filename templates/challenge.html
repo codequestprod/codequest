@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+
+    <h1>{{ challenge.title }}</h1>
+
+    <span class="difficulty-badge">
+        {{ challenge.difficulty }}
+    </span>
+
+    <p>{{ challenge.description }}</p>
+
+    <div class="reward-row">
+        <span>⭐ {{ challenge.xp_reward }} XP</span>
+        <span>🪙 {{ challenge.coin_reward }} Coins</span>
+    </div>
+
+</div>
+
+{% endblock %}
