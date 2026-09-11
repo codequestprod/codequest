@@ -38,11 +38,9 @@
 
         {% else %}
 
-            <form method="POST" action="{{ url_for('complete_challenge', challenge_id=challenge.id) }}">
-                <button type="submit" class="complete-btn">
-                    Complete
-                </button>
-            </form>
+            <a href="{{ url_for('challenge', challenge_id=challenge.id) }}" class="complete-btn">
+                Start Challenge
+            </a>
 
         {% endif %}
 
