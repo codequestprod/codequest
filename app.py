@@ -206,6 +206,9 @@ def register():
         email_sent = send_verification_email(app, new_user)
 
         if not email_sent:
+            db.session.delete(new_user)
+            db.session.commit()
+
             flash("We couldn't send a verification email to that address. Please check the email and try again.", "error")
             return redirect(url_for("register"))
 
