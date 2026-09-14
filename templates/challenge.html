@@ -31,6 +31,10 @@
         ▶ Run Code
     </button>
 
+    <div class="code-output" id="codeOutput">
+    Output will appear here...
+    </div>
+
 </div>
 
 </div>
@@ -38,8 +42,9 @@
 <script>
 function runCode() {
     const code = document.querySelector(".code-editor").value;
+    const output = document.querySelector("#codeOutput");
 
-    console.log(code);
+    output.textContent = code;
 }
 </script>
 
