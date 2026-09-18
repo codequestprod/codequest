@@ -333,3 +333,29 @@ button:disabled {
     margin-top: 12px;
     width: 100%;
 }
+
+/* CODE OUTPUT */
+
+.code-output {
+    margin-top: 15px;
+    padding: 15px;
+
+    background-color: #0d0d0d;
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    font-family: Consolas, "Courier New", monospace;
+}
+
+.output-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #4da3ff;
+    margin-bottom: 10px;
+}
+
+.code-output pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
