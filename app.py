@@ -345,6 +345,17 @@ def challenge(challenge_id):
         challenge=challenge
     )
 
+@app.route("/run-code", methods=["POST"])
+@login_required
+def run_code():
+
+    data = request.get_json()
+
+    code = data.get("code", "")
+
+    return jsonify({
+        "output": code
+    })
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])
 @login_required
