@@ -78,7 +78,8 @@ with app.app_context():
             description="Print Hello World in Python",
             difficulty="Easy",
             xp_reward=50,
-            coin_reward=10
+            coin_reward=10,
+            expected_output="Hello World"
         ))
 
         db.session.add(Challenge(
@@ -86,7 +87,8 @@ with app.app_context():
             description="Reverse a string input",
             difficulty="Easy",
             xp_reward=75,
-            coin_reward=15
+            coin_reward=15,
+            expected_output=""
         ))
 
         db.session.commit()

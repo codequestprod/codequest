@@ -6,6 +6,7 @@ class Challenge(db.Model):
 
     title = db.Column(db.String(120), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    expected_output = db.Column(db.Text, nullable=False)
 
     difficulty = db.Column(db.String(20), nullable=False)
 
