@@ -41,11 +41,28 @@
 </div>
 
 <script>
-function runCode() {
-    const code = document.querySelector(".code-editor").value;
-    const output = document.querySelector("#codeOutput");
+async function runCode() {
 
-    output.textContent = code;
+    const code = document.querySelector(".code-editor").value;
+    const output = document.querySelector("#outputText");
+
+    output.textContent = "Running...";
+
+    const response = await fetch("/run-code", {
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            code: code
+        })
+    });
+
+    const data = await response.json();
+
+    output.textContent = data.output;
 }
 </script>
 
