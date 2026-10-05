@@ -44,6 +44,7 @@
 async function runCode() {
 
     const code = document.querySelector(".code-editor").value;
+    const challengeId = {{ challenge.id }};
     const output = document.querySelector("#outputText");
 
     output.textContent = "Running...";
@@ -56,7 +57,8 @@ async function runCode() {
         },
 
         body: JSON.stringify({
-            code: code
+            code: code,
+            challenge_id: challengeId
         })
     });
 

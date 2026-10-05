@@ -354,9 +354,13 @@ def run_code():
     data = request.get_json()
 
     code = data.get("code", "")
+    challenge_id = data.get("challenge_id")
+
+    challenge = Challenge.query.get_or_404(challenge_id)
 
     return jsonify({
-        "output": code
+        "output": code,
+        "expected_output": challenge.expected_output
     })
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])
