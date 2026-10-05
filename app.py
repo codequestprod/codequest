@@ -360,7 +360,8 @@ def run_code():
 
     return jsonify({
         "output": code,
-        "expected_output": challenge.expected_output
+        "expected_output": challenge.expected_output,
+        "correct": code.strip().lower() == challenge.expected_output.strip().lower()
     })
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])

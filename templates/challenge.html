@@ -64,7 +64,13 @@ async function runCode() {
 
     const data = await response.json();
 
-    output.textContent = data.output;
+    if (data.correct) {
+        output.textContent = "Correct! 🎉";
+
+        window.location.href = "/complete/" + challengeId;
+    } else {
+        output.textContent = data.output;
+    }
 }
 </script>
 
