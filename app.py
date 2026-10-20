@@ -350,22 +350,72 @@ def challenge(challenge_id):
         challenge=challenge
     )
 
+
 @app.route("/run-code", methods=["POST"])
 @login_required
 def run_code():
-
-    data = request.get_json()
+    data = request.get_json() or {}
 
     code = data.get("code", "")
     challenge_id = data.get("challenge_id")
 
+    if not isinstance(code, str) or not code.strip():
+        return jsonify({
+            "output": "Please enter some Python code.",
+            "correct": False
+        }), 400
+
     challenge = Challenge.query.get_or_404(challenge_id)
 
+    api_key = os.getenv("ONLINECOMPILER_API_KEY")
+
+    if not api_key:
+        return jsonify({
+            "output": "Code runner is not configured yet.",
+            "correct": False
+        }), 500
+
+    payload = json.dumps({
+        "compiler": "python-3.14",
+        "code": code,
+        "input": ""
+    }).encode("utf-8")
+
+    api_request = Request(
+        "https://api.onlinecompiler.io/api/run-code-sync/",
+        data=payload,
+        headers={
+            "Authorization": api_key,
+            "Content-Type": "application/json"
+        },
+        method="POST"
+    )
+
+    try:
+        with urlopen(api_request, timeout=35) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError):
+        return jsonify({
+            "output": "Unable to run your code right now. Please try again.",
+            "correct": False
+        }), 502
+
+    output = result.get("output") or ""
+    error = result.get("error") or ""
+
+    correct = (
+        result.get("status") == "success"
+        and result.get("exit_code") == 0
+        and output.strip().casefold()
+        == challenge.expected_output.strip().casefold()
+    )
+
     return jsonify({
-        "output": code,
-        "expected_output": challenge.expected_output,
-        "correct": code.strip().lower() == challenge.expected_output.strip().lower()
+        "output": output if not error else output + error,
+        "correct": correct
     })
+
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])
 @login_required
