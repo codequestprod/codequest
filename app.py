@@ -10,6 +10,9 @@ from models.user import User
 from models.challenge import Challenge, CompletedChallenge
 from models.badge import Badge
 import os
+import json
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 
 app = Flask(__name__)
 
