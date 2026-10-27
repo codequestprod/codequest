@@ -91,7 +91,7 @@ with app.app_context():
             difficulty="Easy",
             xp_reward=75,
             coin_reward=15,
-            expected_output=""
+            expected_output="olleh"
         ))
 
         db.session.commit()
