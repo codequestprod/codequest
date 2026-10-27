@@ -67,7 +67,18 @@ async function runCode() {
     if (data.correct) {
         output.textContent = "Correct! 🎉";
 
-        window.location.href = "/complete/" + challengeId;
+        const completionResponse = await fetch(
+            "/complete/" + challengeId,
+            {
+                method: "POST"
+            }
+        );
+
+        if (completionResponse.redirected) {
+            window.location.href = completionResponse.url;
+        } else if (!completionResponse.ok) {
+            output.textContent = "Correct answer, but reward processing failed.";
+        }
     } else {
         output.textContent = data.output;
     }
