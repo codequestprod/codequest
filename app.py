@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, timedelta
@@ -409,6 +409,14 @@ def run_code():
         == challenge.expected_output.strip().casefold()
     )
 
+    if correct:
+        passed_challenges = session.get("passed_challenges", [])
+
+        if challenge_id not in passed_challenges:
+            passed_challenges.append(challenge_id)
+
+        session["passed_challenges"] = passed_challenges
+
     return jsonify({
         "output": output if not error else output + error,
         "correct": correct
@@ -419,6 +427,12 @@ def run_code():
 def complete_challenge(challenge_id):
 
     challenge = Challenge.query.get_or_404(challenge_id)
+
+    passed_challenges = session.get("passed_challenges", [])
+
+    if challenge_id not in passed_challenges:
+        flash("Run your code and pass the challenge first!", "warning")
+        return redirect(url_for("challenge", challenge_id=challenge_id))
 
     already_done = CompletedChallenge.query.filter_by(
         user_id=current_user.id,
@@ -442,6 +456,11 @@ def complete_challenge(challenge_id):
     ))
 
     db.session.commit()
+
+    passed_challenges = session.get("passed_challenges", [])
+    if challenge_id in passed_challenges:
+        passed_challenges.remove(challenge_id)
+        session["passed_challenges"] = passed_challenges
 
     flash(f"+{challenge.xp_reward} XP, +{challenge.coin_reward} coins! ⭐", "success")
     return redirect(url_for("challenges"))
