@@ -317,7 +317,6 @@ def logout():
 def dashboard():
     return render_template("dashboard.html")
 
-
 # =========================
 # CHALLENGES
 # =========================
@@ -349,7 +348,6 @@ def challenge(challenge_id):
         "challenge.html",
         challenge=challenge
     )
-
 
 @app.route("/run-code", methods=["POST"])
 @login_required
@@ -392,7 +390,7 @@ def run_code():
     )
 
     try:
-        with urlopen(api_request, timeout=35) as response:
+        with urlopen(api_request, timeout=40) as response:
             result = json.loads(response.read().decode("utf-8"))
 
     except (HTTPError, URLError, TimeoutError, json.JSONDecodeError):
@@ -415,7 +413,6 @@ def run_code():
         "output": output if not error else output + error,
         "correct": correct
     })
-
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])
 @login_required
@@ -449,17 +446,14 @@ def complete_challenge(challenge_id):
     flash(f"+{challenge.xp_reward} XP, +{challenge.coin_reward} coins! ⭐", "success")
     return redirect(url_for("challenges"))
 
-
 @app.route("/profile")
 @login_required
 def profile():
     return render_template("profile.html", user=current_user)
 
-
 # =========================
 # RUN
 # =========================
-
     
 if __name__ == "__main__":
     app.run(debug=True)
