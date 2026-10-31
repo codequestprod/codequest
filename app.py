@@ -349,6 +349,7 @@ def challenge(challenge_id):
         challenge=challenge
     )
 
+
 @app.route("/run-code", methods=["POST"])
 @login_required
 def run_code():
@@ -373,54 +374,84 @@ def run_code():
             "correct": False
         }), 500
 
-    payload = json.dumps({
-        "compiler": "python-3.14",
-        "code": code,
-        "input": ""
-    }).encode("utf-8")
+    # Multiple test cases for Reverse String
+    if challenge.title == "Reverse String":
+        test_cases = [
+            ("hello", "olleh"),
+            ("world", "dlrow"),
+            ("python", "nohtyp"),
+            ("codehub", "buh edoc")
+        ]
+    else:
+        test_cases = [
+            ("", challenge.expected_output)
+        ]
 
-    api_request = Request(
-        "https://api.onlinecompiler.io/api/run-code-sync/",
-        data=payload,
-        headers={
-            "Authorization": api_key,
-            "Content-Type": "application/json"
-        },
-        method="POST"
-    )
+    results = []
 
-    try:
-        with urlopen(api_request, timeout=40) as response:
-            result = json.loads(response.read().decode("utf-8"))
+    for test_input, expected_output in test_cases:
 
-    except (HTTPError, URLError, TimeoutError, json.JSONDecodeError):
-        return jsonify({
-            "output": "Unable to run your code right now. Please try again.",
-            "correct": False
-        }), 502
+        payload = json.dumps({
+            "compiler": "python-3.14",
+            "code": code,
+            "input": test_input
+        }).encode("utf-8")
 
-    output = result.get("output") or ""
-    error = result.get("error") or ""
+        api_request = Request(
+            "https://api.onlinecompiler.io/api/run-code-sync/",
+            data=payload,
+            headers={
+                "Authorization": api_key,
+                "Content-Type": "application/json"
+            },
+            method="POST"
+        )
 
-    correct = (
-        result.get("status") == "success"
-        and result.get("exit_code") == 0
-        and output.strip().casefold()
-        == challenge.expected_output.strip().casefold()
-    )
+        try:
+            with urlopen(api_request, timeout=40) as response:
+                result = json.loads(
+                    response.read().decode("utf-8")
+                )
 
-    if correct:
-        passed_challenges = session.get("passed_challenges", [])
+        except (HTTPError, URLError, TimeoutError, json.JSONDecodeError):
+            return jsonify({
+                "output": "Unable to run your code right now. Please try again.",
+                "correct": False
+            }), 502
 
-        if challenge_id not in passed_challenges:
-            passed_challenges.append(challenge_id)
+        output = result.get("output") or ""
+        error = result.get("error") or ""
 
-        session["passed_challenges"] = passed_challenges
+        if (
+            result.get("status") != "success"
+            or result.get("exit_code") != 0
+            or error
+        ):
+            return jsonify({
+                "output": output + error,
+                "correct": False
+            })
+
+        if output.strip().casefold() != expected_output.strip().casefold():
+            return jsonify({
+                "output": output,
+                "correct": False
+            })
+
+        results.append("Passed")
+
+    passed_challenges = session.get("passed_challenges", [])
+
+    if challenge_id not in passed_challenges:
+        passed_challenges.append(challenge_id)
+
+    session["passed_challenges"] = passed_challenges
 
     return jsonify({
-        "output": output if not error else output + error,
-        "correct": correct
+        "output": "All test cases passed!",
+        "correct": True
     })
+
 
 @app.route("/complete/<int:challenge_id>", methods=["POST"])
 @login_required
