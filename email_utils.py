@@ -1,3 +1,4 @@
+
 import os
 import resend
 from flask import url_for
@@ -19,11 +20,11 @@ def send_verification_email(app, user):
 
     try:
         resend.Emails.send({
-            "from": "CodeQuest <noreply@doughauth.store>",
+            "from": "CodeHub <noreply@codehubapp.org>",
             "to": user.email,
-            "subject": "Verify your CodeQuest account",
+            "subject": "Verify your CodeHub account",
             "html": f"""
-            <h2>Welcome to CodeQuest!</h2>
+            <h2>Welcome to CodeHub!</h2>
 
             <p>Thanks for creating an account.</p>
 

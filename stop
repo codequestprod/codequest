@@ -1,0 +1,79 @@
+[33m8472246[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fix bug
+[33m12d7fef[m Fix bug
+[33m7109b4a[m Final touches
+[33ma058e18[m Final touches
+[33md6666bd[m Final touches
+[33ma7bfe9a[m Add copyright footer
+[33mb5eecb2[m License change
+[33m00dfe39[m Add reverse string code checking
+[33m3c49320[m Fix execution
+[33m2a7fe7e[m app.py refine
+[33ma3d2dad[m app.py refine
+[33m643bbba[m Add OnlineCompiler API
+[33me12fec1[m test
+[33m093a100[m Output box prep
+[33me665a0b[m Make challenge ID reach backend
+[33me34b4d5[m Add challenge expected output and migration
+[33ma6ab2ac[m Improve run code route
+[33m2eca596[m Add run code route
+[33m285c0df[m Prepare for safe code output
+[33m14e5b5d[m Remove excess lines
+[33m6af5f65[m Remove excess .gitignore line
+[33m6bda533[m Remove excess req line
+[33m5864232[m Remove excess license line
+[33m4448265[m Add output box
+[33mb3c7927[m Fix run code error
+[33mfa839f1[m Make run code button do something
+[33m22c00dd[m Prevent grammarly of showing up
+[33mf12b5bb[m Prevent grammarly on text fields
+[33m931712d[m Add first code shell
+[33m0f537ea[m Add to challenge.html
+[33m31d5d9c[m Change challenges.html
+[33mdcae5a3[m Add base challenge.html
+[33md59bc26[m Fix small naming issue
+[33m0b2e5c3[m Fix profile XP bug
+[33m8aacfa8[m Email verification fixing part 3
+[33m0d16028[m Email verification fixing part 2
+[33m1cf1e8b[m Email verification fixing part 1
+[33m433c793[m Fix bug
+[33m4cc2593[m *
+[33m3b370eb[m Setup Flask-Migrate
+[33m24767e7[m Fix spacings AGAIN
+[33m20b5f0d[m Prevent duplicate users/emails
+[33m99baaaf[m Fix spacing
+[33m3e5defe[m Fix spacing bug
+[33m817124a[m Fix field spacing bug
+[33m2e4a300[m Fix field combination bug
+[33m3758c3f[m Fix password req ux
+[33m7a3e484[m Fix password reqs
+[33m1f5bf82[m Fix register page bug
+[33meb7ea74[m Fix style.css
+[33m33d034c[m Add create account requirements
+[33mb5f9065[m Fix login/register bug
+[33mab8b316[m Prevent spaces for login/register
+[33mbf05f55[m Remove login bug
+[33m759e04a[m Remove debug + leave only 1 db.create_all
+[33md84705e[m debug
+[33mb90c3d2[m Revert login bug for testing
+[33mb7d99bc[m Fully fix login page bug
+[33m806ca56[m Fix login page bug
+[33m4f8aa6a[m Fix show/hide password buttons
+[33mbe85838[m Fix database URL config
+[33m6e992c2[m pyc
+[33m1389ae1[m Add resend in requirements
+[33mfe2510c[m Add verify route and fix login route
+[33m61ae400[m Set up verification system
+[33m9b0cae2[m Set url by service env variables
+[33me129485[m Add PostgreSQL driver
+[33mb23834f[m Move database config outside run statement
+[33m1255f01[m Add admin reset database route
+[33me3ab271[m Move configuration to environment variables
+[33mae48b26[m Add gitignore and stop tracking .env
+[33m60911d2[m Add Resend email support
+[33m936f42a[m Create .gitignore
+[33mc5fae19[m Update .env
+[33mcf6a6e3[m Update leaderboard.html
+[33mf2c8c2a[m Update app.py
+[33m8dc5eca[m Update requirements.txt
+[33me5874a5[m Create LICENSE
+[33m0625525[m Initial commit
